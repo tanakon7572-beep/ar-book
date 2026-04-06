@@ -33,8 +33,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
                 const existing = await prisma.page.findUnique({ where: { id: Number(id) } })
                 if (existing?.imageUrl) {
                     try {
-                        await unlink(path.join(process.cwd(), 'public', existing.imageUrl))
-                    } catch { /* old file may not exist */ }
+                        const { deleteFileFromSupabase } = await import('@/lib/supabase')
+                        const oldFilename = existing.imageUrl.split('/').pop()
+                        if (oldFilename) await deleteFileFromSupabase(oldFilename)
+                    } catch { /* ignore */ }
                 }
 
                 const bytes = await file.arrayBuffer()
@@ -42,10 +44,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
                 const rawExt = file.name.includes('.') ? file.name.split('.').pop()!.toLowerCase() : 'jpg'
                 const safeExt = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif', 'mp4', 'webm', 'mov', 'm4v'].includes(rawExt) ? rawExt : 'jpg'
                 const filename = `${crypto.randomUUID()}.${safeExt}`
-                const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-                await mkdir(uploadDir, { recursive: true })
-                await writeFile(path.join(uploadDir, filename), buffer)
-                imageUrl = `/uploads/${filename}`
+                
+                try {
+                    const { uploadFileToSupabase } = await import('@/lib/supabase')
+                    imageUrl = await uploadFileToSupabase(buffer, filename, file.type)
+                } catch (error) {
+                    console.error('Supabase upload error:', error)
+                    return NextResponse.json({ error: 'Failed to upload to cloud storage' }, { status: 500 })
+                }
             }
 
             const page = await prisma.page.update({
@@ -84,7 +90,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     const { id } = await params
     const page = await prisma.page.findUnique({ where: { id: Number(id) } })
     if (page?.imageUrl) {
-        try { await unlink(path.join(process.cwd(), 'public', page.imageUrl)) } catch { /* ignore */ }
+        try { 
+            const { deleteFileFromSupabase } = await import('@/lib/supabase')
+            const filename = page.imageUrl.split('/').pop()
+            if (filename) await deleteFileFromSupabase(filename)
+        } catch { /* ignore */ }
     }
     await prisma.page.delete({ where: { id: Number(id) } })
     return NextResponse.json({ success: true })

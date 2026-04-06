@@ -38,6 +38,7 @@ export default function BookEditorPage() {
             await fetch('/api/pages', { method: 'POST', body: formData })
         }
         setUploading(false)
+        if (fileInputRef.current) fileInputRef.current.value = ''
         router.refresh()
         load()
     }
@@ -48,6 +49,7 @@ export default function BookEditorPage() {
         formData.append('image', file)
         await fetch(`/api/pages/${pageId}`, { method: 'PATCH', body: formData })
         setReplacingId(null)
+        if (replaceInputRef.current) replaceInputRef.current.value = ''
         router.refresh()
         load()
     }

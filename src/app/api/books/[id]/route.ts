@@ -33,18 +33,31 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
             let coverImageUrl: string | undefined = undefined
 
             if (file && file.size > 0) {
+                // Cleanup old cover before replacing
+                const existing = await prisma.book.findUnique({ where: { id: Number(id) } })
+                if (existing?.coverImageUrl) {
+                    try {
+                        const { deleteFileFromSupabase } = await import('@/lib/supabase')
+                        const oldFilename = existing.coverImageUrl.split('/').pop()
+                        if (oldFilename) await deleteFileFromSupabase(oldFilename)
+                    } catch { /* ignore */ }
+                }
+
                 const bytes = await file.arrayBuffer()
                 const buffer = Buffer.from(bytes)
-                // Use built-in crypto - no external uuid needed
                 const uniqueId = crypto.randomUUID()
                 const originalName = file.name || 'cover.jpg'
                 const ext = originalName.includes('.') ? originalName.split('.').pop()!.toLowerCase() : 'jpg'
                 const safeExt = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif', 'mp4', 'webm', 'mov', 'm4v'].includes(ext) ? ext : 'jpg'
                 const filename = `cover-${uniqueId}.${safeExt}`
-                const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-                await mkdir(uploadDir, { recursive: true })
-                await writeFile(path.join(uploadDir, filename), buffer)
-                coverImageUrl = `/uploads/${filename}`
+
+                try {
+                    const { uploadFileToSupabase } = await import('@/lib/supabase')
+                    coverImageUrl = await uploadFileToSupabase(buffer, filename, file.type)
+                } catch (error) {
+                    console.error('Supabase upload error:', error)
+                    return NextResponse.json({ error: 'Failed to upload to cloud storage' }, { status: 500 })
+                }
             }
 
             const updateData: Record<string, unknown> = {}

@@ -42,10 +42,14 @@ export async function PATCH(req: Request) {
             const rawExt = file.name.includes('.') ? file.name.split('.').pop()!.toLowerCase() : 'jpg'
             const safeExt = ['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(rawExt) ? rawExt : 'jpg'
             const filename = `bg-custom.${safeExt}`
-            const uploadDir = path.join(process.cwd(), 'public')
-            await mkdir(uploadDir, { recursive: true })
-            await writeFile(path.join(uploadDir, filename), buffer)
-            backgroundImageUrl = `/${filename}`
+            
+            try {
+                const { uploadFileToSupabase } = await import('@/lib/supabase')
+                backgroundImageUrl = await uploadFileToSupabase(buffer, filename, file.type)
+            } catch (error) {
+                console.error('Supabase upload error:', error)
+                return NextResponse.json({ error: 'Failed to upload to cloud storage' }, { status: 500 })
+            }
         }
 
         let settings = await prisma.siteSettings.findFirst()

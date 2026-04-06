@@ -23,10 +23,15 @@ export async function POST(req: Request) {
         const rawExt = file.name.includes('.') ? file.name.split('.').pop()!.toLowerCase() : 'jpg'
         const safeExt = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif', 'mp4', 'webm', 'mov', 'm4v'].includes(rawExt) ? rawExt : 'jpg'
         const filename = `${crypto.randomUUID()}.${safeExt}`
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-        await mkdir(uploadDir, { recursive: true })
-        await writeFile(path.join(uploadDir, filename), buffer)
-        imageUrl = `/uploads/${filename}`
+        
+        try {
+            // Upload to Supabase Storage
+            const { uploadFileToSupabase } = await import('@/lib/supabase')
+            imageUrl = await uploadFileToSupabase(buffer, filename, file.type)
+        } catch (error) {
+            console.error('Supabase upload error:', error)
+            return NextResponse.json({ error: 'Failed to upload to cloud storage' }, { status: 500 })
+        }
     }
 
     const lastPage = await prisma.page.findFirst({
