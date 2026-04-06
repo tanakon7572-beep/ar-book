@@ -1,9 +1,11 @@
 # Stage 1: Build base with standard Node.js image
 FROM node:20-alpine AS base
 
+# Install libc6-compat for Prisma to work correctly on Alpine
+RUN apk add --no-cache libc6-compat
+
 # Stage 2: Install dependencies
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
