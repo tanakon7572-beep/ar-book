@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Shelf {
+  id        Int      @id @default(autoincrement())
+  name      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  books     Book[]
+}
+
+model Book {
+  id             Int      @id @default(autoincrement())
+  title          String
+  subtitle       String?
+  coverColor     String   @default("#8B2252")
+  spineColor     String   @default("#5C1A38")
+  coverImageUrl  String?
+  shelfId        Int
+  shelf          Shelf    @relation(fields: [shelfId], references: [id], onDelete: Cascade)
+  order          Int      @default(0)
+  qrToken        String   @unique @default(cuid())
+  createdAt      DateTime @default(now())
+  pages          Page[]
+}
+
+model Page {
+  id        Int      @id @default(autoincrement())
+  bookId    Int
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  order     Int      @default(0)
+  imageUrl  String?
+  text      String?
+  caption   String?
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id                 Int     @id @default(autoincrement())
+  backgroundImageUrl String?
+  backgroundType     String  @default("gradient") // "gradient" | "image"
+  backgroundColor    String  @default("#2d0035")
+  siteTitle          String  @default("AR Photo Book")
+}
