@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 
 type Page = {
     id: number; order: number; imageUrl: string | null; text: string | null; caption: string | null
@@ -91,12 +92,12 @@ export default function BookViewerPage() {
                             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#050008', zIndex: 1 }}
                         />
                     ) : (
-                        <img
+                        <Image
                             src={page.imageUrl}
                             alt=""
-                            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#050008', zIndex: 1 }}
-                            loading="lazy"
-                            decoding="async"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            style={{ objectFit: 'cover', backgroundColor: '#050008', zIndex: 1 }}
                         />
                     )
                 ) : (
@@ -180,7 +181,7 @@ export default function BookViewerPage() {
                                                 book.coverImageUrl.match(/\.(mp4|webm|mov|m4v)$/i) ? (
                                                     <video src={book.coverImageUrl} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#050008', zIndex: 0 }} />
                                                 ) : (
-                                                    <div style={{ position: 'absolute', inset: 0, background: `url(${book.coverImageUrl}) center/cover`, zIndex: 0 }} />
+                                                    <Image src={book.coverImageUrl} alt="Cover" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: 'cover', zIndex: 0 }} priority />
                                                 )
                                             ) : (
                                                 <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(155deg, ${book?.coverColor}, #050008)`, zIndex: 0 }} />
@@ -225,7 +226,7 @@ export default function BookViewerPage() {
                                                 book.coverImageUrl.match(/\.(mp4|webm|mov|m4v)$/i) ? (
                                                     <video src={book.coverImageUrl} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#050008', zIndex: 0 }} />
                                                 ) : (
-                                                    <div style={{ position: 'absolute', inset: 0, background: `url(${book.coverImageUrl}) center/cover`, zIndex: 0 }} />
+                                                    <Image src={book.coverImageUrl} alt="Cover" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: 'cover', zIndex: 0 }} priority />
                                                 )
                                             ) : (
                                                 <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(155deg, ${book?.coverColor}, #050008)`, zIndex: 0 }} />
@@ -255,7 +256,7 @@ export default function BookViewerPage() {
                                         book.coverImageUrl.match(/\.(mp4|webm|mov|m4v)$/i) ? (
                                             <video src={book.coverImageUrl} autoPlay loop muted playsInline style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#050008', zIndex: 0 }} />
                                         ) : (
-                                            <div style={{ position: 'absolute', inset: 0, background: `url(${book.coverImageUrl}) center/cover`, zIndex: 0 }} />
+                                            <Image src={book.coverImageUrl} alt="Cover" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: 'cover', zIndex: 0 }} priority />
                                         )
                                     ) : (
                                         <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(155deg, ${book?.coverColor}, #050008)`, zIndex: 0 }} />
@@ -307,7 +308,7 @@ export default function BookViewerPage() {
                                     className={`thumb-item${currentSpread === sIdx ? ' active' : ''}`}
                                     onClick={() => { if (!flipping) setCurrentSpread(sIdx) }}
                                 >
-                                    {p.imageUrl ? <img src={p.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" /> : <div style={{ height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)' }}>📄</div>}
+                                    {p.imageUrl ? <Image src={p.imageUrl} alt="" fill sizes="100px" style={{ objectFit: 'cover' }} loading="lazy" /> : <div style={{ height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)' }}>📄</div>}
                                 </div>
                             )
                         })}

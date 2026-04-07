@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 type Page = { imageUrl: string | null }
@@ -97,7 +98,7 @@ export default function ShelfPage() {
                                                     <div className="public-book-spine" style={{ background: book.spineColor || '#222' }} />
                                                     <div className="public-book-front">
                                                         {displayImage ? (
-                                                            <img src={displayImage} alt={book.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                            <Image src={displayImage} alt={book.title} fill sizes="(max-width: 768px) 50vw, 33vw" style={{ objectFit: 'cover' }} />
                                                         ) : (
                                                             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                                 <span style={{ fontSize: '3rem', filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.5))' }}>❤️</span>
