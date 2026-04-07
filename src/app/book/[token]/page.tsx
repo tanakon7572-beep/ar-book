@@ -291,29 +291,7 @@ export default function BookViewerPage() {
                     <button className="flip-btn" onClick={() => flip('next')} disabled={isLastSpread || !!flipping}>→</button>
                 </div>
 
-                {/* Thumbnails - Premium Track */}
-                {pages.length > 0 && (
-                    <div className="thumb-strip fade-up" style={{ animationDelay: '0.3s', marginTop: 'clamp(16px, 4vh, 60px)', background: 'rgba(0,0,0,0.3)', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.03)' }}>
-                        <div
-                            className={`thumb-item${currentSpread === 0 ? ' active' : ''}`}
-                            onClick={() => { if (!flipping) setCurrentSpread(0) }}
-                            style={{ background: 'var(--g-pink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', boxShadow: currentSpread === 0 ? '0 0 30px var(--c-pink)' : 'none' }}
-                        >❤️</div>
-                        {pages.map((p, i) => {
-                            const sIdx = Math.floor(i / 2) + 1
-                            if (i % 2 !== 0) return null
-                            return (
-                                <div
-                                    key={p.id}
-                                    className={`thumb-item${currentSpread === sIdx ? ' active' : ''}`}
-                                    onClick={() => { if (!flipping) setCurrentSpread(sIdx) }}
-                                >
-                                    {p.imageUrl ? <Image src={p.imageUrl} alt="" fill sizes="100px" style={{ objectFit: 'cover' }} loading="lazy" /> : <div style={{ height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)' }}>📄</div>}
-                                </div>
-                            )
-                        })}
-                    </div>
-                )}
+
             </main>
 
             <style jsx>{`
