@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 
 export async function POST(req: Request) {
     const { password } = await req.json()
-    if (!checkPassword(password)) {
+    if (!(await checkPassword(password))) {
         return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
     }
     const token = await createSession()

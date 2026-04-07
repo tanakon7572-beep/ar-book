@@ -130,19 +130,15 @@ export default function BookViewerPage() {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Header */}
-            <header style={{
-                padding: '24px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                borderBottom: '1px solid rgba(255,255,255,0.05)', background: 'linear-gradient(180deg, rgba(0,0,0,0.9), transparent)',
-                backdropFilter: 'blur(20px)', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-            }}>
-                <button onClick={() => router.push('/shelf')} className="btn btn-ghost" style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '30px', padding: '10px 24px' }}>
+            <header className="viewer-header">
+                <button onClick={() => router.push('/shelf')} className="btn btn-ghost viewer-header-btn" style={{ background: 'rgba(255,255,255,0.05)', padding: '10px 24px' }}>
                     ← คลังความทรงจำ
                 </button>
-                <div style={{ textAlign: 'center' }}>
+                <div className="viewer-header-title" style={{ textAlign: 'center' }}>
                     <h1 className="text-gradient" style={{ fontFamily: 'var(--f-serif)', fontSize: '1.6rem', fontWeight: 900, marginBottom: '2px', letterSpacing: '-0.02em' }}>{book?.title}</h1>
                     <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 800 }}>{book?.shelf?.name}</p>
                 </div>
-                <Link href="/" className="btn btn-primary" style={{ padding: '10px 28px', borderRadius: '30px', boxShadow: '0 10px 30px rgba(255,0,128,0.3)' }}>📸 สแกนใหม่</Link>
+                <Link href="/" className="btn btn-primary viewer-header-btn" style={{ padding: '10px 28px', boxShadow: '0 10px 30px rgba(255,0,128,0.3)' }}>📸 สแกนใหม่</Link>
             </header>
 
             {/* Main Content */}

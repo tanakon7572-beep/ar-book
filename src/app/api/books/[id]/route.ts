@@ -44,7 +44,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
                 }
 
                 const bytes = await file.arrayBuffer()
-                const buffer = Buffer.from(bytes)
                 const uniqueId = crypto.randomUUID()
                 const originalName = file.name || 'cover.jpg'
                 const ext = originalName.includes('.') ? originalName.split('.').pop()!.toLowerCase() : 'jpg'
@@ -53,7 +52,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
                 try {
                     const { uploadFileToSupabase } = await import('@/lib/supabase')
-                    coverImageUrl = await uploadFileToSupabase(buffer, filename, file.type)
+                    coverImageUrl = await uploadFileToSupabase(bytes, filename, file.type)
                 } catch (error) {
                     console.error('Supabase upload error:', error)
                     return NextResponse.json({ error: 'Failed to upload to cloud storage' }, { status: 500 })

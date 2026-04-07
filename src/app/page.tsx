@@ -81,24 +81,106 @@ export default function ScannerPage() {
           </div>
         </div>
       ) : (
-        <div className="glass-panel fade-up" style={{ padding: '32px', width: '100%', maxWidth: '600px', position: 'relative' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-            <h2 style={{ fontSize: '1.2rem', color: 'var(--c-pink)' }}>🔍 กำลังมองหาหัวใจ...</h2>
-            <button className="btn btn-ghost btn-sm" onClick={() => setScanning(false)}>ยกเลิก</button>
+        <div className="fade-up" style={{ position: 'fixed', inset: 0, zIndex: 1000, background: '#000', display: 'flex', flexDirection: 'column' }}>
+          {/* Top Bar Floating over the camera */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 100, padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(180deg, rgba(0,0,0,0.8), transparent)' }}>
+            <h2 style={{ fontSize: '1.2rem', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>🔍 สแกน QR Code หนังสือ</h2>
+            <button className="btn btn-ghost" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', color: '#fff', borderRadius: '30px', padding: '8px 24px', border: '1px solid rgba(255,255,255,0.2)' }} onClick={() => setScanning(false)}>ปิดกล้อง</button>
           </div>
 
-          <div id="reader" style={{ overflow: 'hidden', borderRadius: '24px', border: '5px solid rgba(255,255,255,0.05)', background: '#000', position: 'relative' }}>
-            {/* Animating Scan Line Overlay */}
+          <div id="reader" style={{ flex: 1, width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
+            {/* Animating Scan Line Overlay - Center Area */}
             <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
-              background: 'var(--c-pink)', boxShadow: '0 0 20px var(--c-pink)',
-              animation: 'scan-line 3s linear infinite', zIndex: 10
-            }} />
+              position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+              width: '280px', height: '280px',
+              border: '2px solid rgba(255,255,255,0.3)',
+              borderRadius: '24px',
+              boxShadow: '0 0 0 4000px rgba(0,0,0,0.65)',
+              zIndex: 10, pointerEvents: 'none'
+            }}>
+                {/* Corner markers */}
+                <div style={{position: 'absolute', top: '-3px', left: '-3px', width: '40px', height: '40px', borderTop: '5px solid var(--c-pink)', borderLeft: '5px solid var(--c-pink)', borderTopLeftRadius: '24px' }} />
+                <div style={{position: 'absolute', top: '-3px', right: '-3px', width: '40px', height: '40px', borderTop: '5px solid var(--c-pink)', borderRight: '5px solid var(--c-pink)', borderTopRightRadius: '24px' }} />
+                <div style={{position: 'absolute', bottom: '-3px', left: '-3px', width: '40px', height: '40px', borderBottom: '5px solid var(--c-pink)', borderLeft: '5px solid var(--c-pink)', borderBottomLeftRadius: '24px' }} />
+                <div style={{position: 'absolute', bottom: '-3px', right: '-3px', width: '40px', height: '40px', borderBottom: '5px solid var(--c-pink)', borderRight: '5px solid var(--c-pink)', borderBottomRightRadius: '24px' }} />
+                
+                {/* Scan line */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 10, right: 10, height: '4px',
+                  background: 'var(--c-pink)', boxShadow: '0 0 15px 3px var(--c-pink)',
+                  animation: 'scan-line-vertical 2.5s ease-in-out infinite', zIndex: 10
+                }} />
+            </div>
           </div>
 
-          <p className="text-center mt-6" style={{ fontSize: '0.9rem', color: 'var(--c-text-3)' }}>
-            ส่องไปหน้า QR Code เพื่อเปิดอัลบั้มความทรงจำ
-          </p>
+          {/* Bottom Hint */}
+          <div style={{ position: 'absolute', bottom: '40px', left: 0, right: 0, textAlign: 'center', zIndex: 100, padding: '0 20px', pointerEvents: 'none' }}>
+             <p style={{ display: 'inline-block', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 24px', borderRadius: '30px', color: '#fff', fontSize: '0.95rem' }}>
+                จัด QR Code ให้อยู่ในกรอบเพื่อเปิดหน้าหนังสือ
+             </p>
+          </div>
+
+          <style jsx global>{`
+            @keyframes scan-line-vertical {
+              0% { top: 10%; opacity: 0; }
+              10% { opacity: 1; }
+              90% { opacity: 1; }
+              100% { top: 90%; opacity: 0; }
+            }
+            #reader {
+              border: none !important;
+              background: #000;
+            }
+            #reader__scan_region {
+              background: #000 !important;
+            }
+            #reader__scan_region img {
+              display: none !important; 
+            }
+            #reader video {
+              width: 100vw !important;
+              height: 100vh !important;
+              object-fit: cover !important;
+              border-radius: 0 !important;
+            }
+            #reader__dashboard_section_csr {
+              position: absolute !important;
+              bottom: 120px;
+              left: 50%;
+              transform: translateX(-50%);
+              z-index: 200;
+              width: 90%;
+              max-width: 400px;
+              background: rgba(0,0,0,0.7);
+              backdrop-filter: blur(10px);
+              padding: 16px;
+              border-radius: 16px;
+              border: 1px solid rgba(255,255,255,0.1);
+            }
+            #reader__dashboard_section_csr select {
+              width: 100%;
+              padding: 12px;
+              border-radius: 8px;
+              background: rgba(255,255,255,0.1) !important;
+              color: white !important;
+              border: 1px solid rgba(255,255,255,0.2) !important;
+              margin-bottom: 12px;
+              font-size: 1rem;
+            }
+            #reader__dashboard_section_csr button {
+              width: 100%;
+              padding: 14px 16px;
+              border-radius: 8px;
+              background: var(--c-pink) !important;
+              color: white !important;
+              border: none !important;
+              font-family: inherit;
+              font-weight: bold;
+              font-size: 1.1rem;
+              cursor: pointer;
+            }
+            #reader a { display: none; }
+          `}</style>
         </div>
       )}
 

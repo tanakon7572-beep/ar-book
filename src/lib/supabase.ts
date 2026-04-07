@@ -6,7 +6,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 // Use Service Role to bypass RLS for server-side operations
 export const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)
 
-export async function uploadFileToSupabase(file: Buffer, filename: string, contentType: string) {
+export async function uploadFileToSupabase(file: ArrayBuffer | Buffer | File, filename: string, contentType: string) {
     const { data, error } = await supabase.storage
         .from('ar-book-uploads')
         .upload(filename, file, {

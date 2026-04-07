@@ -193,7 +193,6 @@ body {
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(120px);
   pointer-events: none;
   z-index: 0;
   animation: floatOrb 25s ease-in-out infinite;
@@ -202,7 +201,7 @@ body {
 .orb-1 {
   width: 600px;
   height: 600px;
-  background: rgba(255, 0, 128, 0.15);
+  background: radial-gradient(circle, rgba(255, 0, 128, 0.15) 0%, transparent 70%);
   top: -20%;
   left: -10%;
 }
@@ -210,7 +209,7 @@ body {
 .orb-2 {
   width: 500px;
   height: 500px;
-  background: rgba(191, 64, 255, 0.12);
+  background: radial-gradient(circle, rgba(191, 64, 255, 0.12) 0%, transparent 70%);
   bottom: -15%;
   right: -5%;
   animation-delay: -8s;
@@ -219,7 +218,7 @@ body {
 .orb-3 {
   width: 350px;
   height: 350px;
-  background: rgba(255, 0, 128, 0.08);
+  background: radial-gradient(circle, rgba(255, 0, 128, 0.08) 0%, transparent 70%);
   top: 40%;
   left: 45%;
   animation-delay: -15s;
@@ -421,7 +420,7 @@ h3 {
   width: 380px;
   height: 540px;
   position: relative;
-  background: #fffafa;
+  background: #050008;
   overflow: hidden;
   transform-origin: center center;
 }
@@ -477,7 +476,7 @@ h3 {
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background: #fff;
+  background: #050008;
   overflow: hidden;
   border-radius: 0 10px 10px 0;
   box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
@@ -683,19 +682,19 @@ h3 {
 
 @media (max-width: 768px) {
   .book-spread-container {
-    margin: 20px auto;
+    margin: 10px auto;
   }
 
   .book-page {
-    width: 46vw;
+    width: 48vw;
     /* Increase height to fit 9:16 vertical photos properly */
-    height: 82vw; 
+    height: 86vw; 
   }
 
   .book-cover {
-    width: 46vw;
+    width: 48vw;
     aspect-ratio: auto;
-    height: 82vw;
+    height: 86vw;
   }
 
   .flip-controls {
@@ -835,6 +834,9 @@ h3 {
   .mobile-nav-bottom {
     display: flex !important;
   }
+  .mobile-nav-bottom::-webkit-scrollbar {
+    display: none;
+  }
 
   .admin-topbar {
     padding: 16px 20px !important;
@@ -853,5 +855,52 @@ h3 {
   .topbar-link-logout {
     padding: 8px !important;
     border-radius: 50% !important;
+  }
+}
+
+/* Viewer Header Responsive Styles */
+.viewer-header {
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent);
+  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  gap: 12px;
+}
+
+.viewer-header-btn {
+  border-radius: 30px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .viewer-header {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+  
+  .viewer-header-btn.btn-ghost {
+    padding: 8px 12px !important;
+    font-size: 0.8rem;
+  }
+  
+  .viewer-header-btn.btn-primary {
+    padding: 8px 16px !important;
+    font-size: 0.8rem;
+  }
+  
+  .viewer-header-title h1 {
+    font-size: 1.1rem !important;
+  }
+  
+  .viewer-header-title p {
+    font-size: 0.6rem !important;
   }
 }

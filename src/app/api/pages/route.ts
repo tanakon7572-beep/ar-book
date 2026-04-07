@@ -19,15 +19,14 @@ export async function POST(req: Request) {
 
     if (file && file.size > 0) {
         const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
         const rawExt = file.name.includes('.') ? file.name.split('.').pop()!.toLowerCase() : 'jpg'
         const safeExt = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif', 'mp4', 'webm', 'mov', 'm4v'].includes(rawExt) ? rawExt : 'jpg'
         const filename = `${crypto.randomUUID()}.${safeExt}`
         
         try {
-            // Upload to Supabase Storage
+            // Upload to Supabase Storage using ArrayBuffer natively
             const { uploadFileToSupabase } = await import('@/lib/supabase')
-            imageUrl = await uploadFileToSupabase(buffer, filename, file.type)
+            imageUrl = await uploadFileToSupabase(bytes, filename, file.type)
         } catch (error) {
             console.error('Supabase upload error:', error)
             return NextResponse.json({ error: 'Failed to upload to cloud storage' }, { status: 500 })

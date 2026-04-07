@@ -7,8 +7,6 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model Shelf {
@@ -51,4 +49,5 @@ model SiteSettings {
   backgroundType     String  @default("gradient") // "gradient" | "image"
   backgroundColor    String  @default("#2d0035")
   siteTitle          String  @default("AR Photo Book")
+  adminPassword      String?
 }

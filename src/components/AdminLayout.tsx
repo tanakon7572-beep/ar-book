@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         borderBottom: '1px solid var(--c-border)',
         boxShadow: '0 10px 40px rgba(0,0,0,0.03)'
       }}>
-        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '300px', height: '100px', background: 'var(--c-pink)', opacity: 0.15, filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '300px', height: '100px', background: 'radial-gradient(ellipse at top, rgba(255,0,128,0.2) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Logo Area */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', zIndex: 1, flexShrink: 0 }}>

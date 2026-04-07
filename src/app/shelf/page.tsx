@@ -48,7 +48,7 @@ export default function ShelfPage() {
 
             <main className="shelf-main">
                 <div className="text-center fade-up shelf-hero" style={{ animationDelay: '0.2s', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '300px', height: '300px', background: 'var(--g-pink)', opacity: 0.1, filter: 'blur(100px)', borderRadius: '50%', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '300px', height: '300px', background: 'radial-gradient(circle, rgba(255,0,128,0.15) 0%, transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }} />
                     <h1 className="text-gradient" style={{ marginBottom: '12px', fontWeight: 900, textShadow: '0 10px 40px rgba(255,0,128,0.3)' }}>
                         คลังความทรงจำ
                     </h1>

@@ -1,5 +1,5 @@
 # Stage 1: Build base with standard Node.js image
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 
 # Install libc6-compat for Prisma to work correctly on Alpine
 RUN apk add --no-cache libc6-compat
@@ -17,6 +17,11 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generate Prisma Client
+# We provide dummy URLs for Prisma configuration validation during build
+ARG DATABASE_URL="postgresql://user:password@localhost:5432/db"
+ARG DIRECT_URL="postgresql://user:password@localhost:5432/db"
+ENV DATABASE_URL=$DATABASE_URL
+ENV DIRECT_URL=$DIRECT_URL
 RUN npx prisma generate
 
 # Build Next.js
@@ -34,7 +39,10 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Set correct permissions
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.js ./
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 

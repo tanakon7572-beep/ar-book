@@ -10,6 +10,9 @@ out
 build
 dist
 
+# Uploads
+public/uploads
+
 # Environment variables
 .env
 .env*.local

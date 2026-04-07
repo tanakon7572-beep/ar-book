@@ -1,12 +1,12 @@
-app = "ar-photo-book-tanakon"
-primary_region = "hkg"
+app = "ar-book"
+primary_region = "sin"
 
 [build]
   dockerfile = "Dockerfile"
 
 [deploy]
   # นี่คือคำสั่งสำหรับรัน Prisma Migration อัตโนมัติทุกครั้งที่ Deploy
-  release_command = "npx prisma migrate deploy"
+  release_command = "npx prisma db push --accept-data-loss"
 
 [http_service]
   internal_port = 3000
