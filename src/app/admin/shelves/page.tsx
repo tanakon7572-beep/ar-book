@@ -100,7 +100,7 @@ export default function AdminShelvesPage() {
                                     )}
                                     <div style={{ background: 'var(--g-pink)', padding: '4px 14px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 900, color: '#fff', boxShadow: '0 4px 10px rgba(255,0,128,0.2)' }}>{shelf.books.length} BOOKS</div>
                                 </div>
-                                <div style={{ display: 'flex', gap: '12px' }}>
+                                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                                     {editingId === shelf.id ? (
                                         <>
                                             <button className="btn btn-primary btn-sm" onClick={() => saveEdit(shelf.id)}>💾 บันทึกการแก้ไข</button>

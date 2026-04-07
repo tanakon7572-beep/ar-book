@@ -544,11 +544,11 @@ h3 {
 
 .thumb-strip {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
-  overflow-x: auto;
-  padding: 16px;
+  padding: 24px 16px;
   margin: 20px 0;
-  scrollbar-width: none;
 }
 
 .thumb-item {
