@@ -883,6 +883,7 @@ h3 {
 @media (max-width: 768px) {
   .viewer-header {
     padding: 12px 16px;
+    padding-top: max(12px, env(safe-area-inset-top));
     gap: 8px;
   }
   

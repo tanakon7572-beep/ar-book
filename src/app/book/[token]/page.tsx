@@ -76,7 +76,7 @@ export default function BookViewerPage() {
     const PageContent = ({ page, side }: { page: Page | null, side: 'left' | 'right' }) => {
         if (!page) {
             return (
-                <div style={{ height: '100%', background: '#fff', boxShadow: 'inset 0 0 60px rgba(0,0,0,0.03)' }} />
+                <div style={{ height: '100%', background: '#050008', boxShadow: 'inset 0 0 60px rgba(0,0,0,0.4)', borderRadius: side === 'left' ? '6px 0 0 6px' : '0 10px 10px 0' }} />
             )
         }
 
@@ -95,10 +95,12 @@ export default function BookViewerPage() {
                             src={page.imageUrl}
                             alt=""
                             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', backgroundColor: '#050008', zIndex: 1 }}
+                            loading="lazy"
+                            decoding="async"
                         />
                     )
                 ) : (
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #f5f7fa 0%, #eef1f6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(0,0,0,0.03)', fontSize: '8rem', boxShadow: 'inset 0 0 80px rgba(255,255,255,0.8)' }}>🌸</div>
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, #111 0%, #000 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.03)', fontSize: '8rem', boxShadow: 'inset 0 0 80px rgba(0,0,0,0.8)' }}>🌸</div>
                 )}
 
                 {/* 3. Text Overlay - Pill Style like Page Number */}
@@ -131,14 +133,18 @@ export default function BookViewerPage() {
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Header */}
             <header className="viewer-header">
-                <button onClick={() => router.push('/shelf')} className="btn btn-ghost viewer-header-btn" style={{ background: 'rgba(255,255,255,0.05)', padding: '10px 24px' }}>
-                    ← คลังความทรงจำ
+                <button onClick={() => router.push('/shelf')} className="btn btn-ghost viewer-header-btn" style={{ background: 'rgba(255,255,255,0.05)', padding: '10px 16px' }}>
+                    <span className="hide-mobile">← คลังความทรงจำ</span>
+                    <span className="show-mobile">← กลับ</span>
                 </button>
                 <div className="viewer-header-title" style={{ textAlign: 'center' }}>
                     <h1 className="text-gradient" style={{ fontFamily: 'var(--f-serif)', fontSize: '1.6rem', fontWeight: 900, marginBottom: '2px', letterSpacing: '-0.02em' }}>{book?.title}</h1>
                     <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 800 }}>{book?.shelf?.name}</p>
                 </div>
-                <Link href="/" className="btn btn-primary viewer-header-btn" style={{ padding: '10px 28px', boxShadow: '0 10px 30px rgba(255,0,128,0.3)' }}>📸 สแกนใหม่</Link>
+                <Link href="/" className="btn btn-primary viewer-header-btn" style={{ padding: '10px 16px', boxShadow: '0 10px 30px rgba(255,0,128,0.3)' }}>
+                    <span className="hide-mobile">📸 สแกนใหม่</span>
+                    <span className="show-mobile">📸 สแกน</span>
+                </Link>
             </header>
 
             {/* Main Content */}
@@ -301,7 +307,7 @@ export default function BookViewerPage() {
                                     className={`thumb-item${currentSpread === sIdx ? ' active' : ''}`}
                                     onClick={() => { if (!flipping) setCurrentSpread(sIdx) }}
                                 >
-                                    {p.imageUrl ? <img src={p.imageUrl} alt="" style={{ objectFit: 'cover' }} /> : <div style={{ height: '100%', background: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📄</div>}
+                                    {p.imageUrl ? <img src={p.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" /> : <div style={{ height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)' }}>📄</div>}
                                 </div>
                             )
                         })}
@@ -328,6 +334,11 @@ export default function BookViewerPage() {
                 .liquid-glass-overlay:hover {
                     background: rgba(0, 0, 0, 0.6);
                     transform: translateY(-2px);
+                }
+                .show-mobile { display: none; }
+                @media (max-width: 600px) {
+                    .hide-mobile { display: none; }
+                    .show-mobile { display: inline; }
                 }
             `}</style>
         </div>
